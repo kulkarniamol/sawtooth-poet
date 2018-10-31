@@ -29,7 +29,7 @@ node ('master') {
                 sh 'git fetch --tag'
             }
 
- if (!(env.BRANCH_NAME == 'master' && env.JOB_BASE_NAME == 'temp')) {
+ if (!(env.BRANCH_NAME == 'temp' && env.JOB_BASE_NAME == 'temp')) {
                 stage("Check Whitelist") {
                     readTrusted 'bin/whitelist'
                     sh './bin/whitelist "$CHANGE_AUTHOR" /etc/jenkins-authorized-builders'
