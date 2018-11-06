@@ -1,1 +1,3 @@
+# Copyright 2018 Intel(R) Corporation
+
 recursive-include sawtooth_ias_client *.py
