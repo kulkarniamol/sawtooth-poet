@@ -45,10 +45,10 @@ class IasClient:
                 group identified by {gid} parameter.
         """
 
-        path = '{}/{}'.format(path, gid) if gid else path
-        url = urljoin(self._ias_url, path)
+        url = '{}/{}/{}'.format(self._ias_url, path, gid) if gid else path
         LOGGER.debug("Fetching SigRL from: %s", url)
-        result = requests.get(url, headers={"Ocp-Apim-SubscriptionKey": self._ias_key}, timeout=self._timeout)
+        result = requests.get(url, headers={"Ocp-Apim-Subscription-Key": self._ias_key},
+                              timeout=self._timeout)
         if result.status_code != requests.codes.ok:
             LOGGER.error("get_signature_revocation_lists HTTP Error code : %d",
                          result.status_code)
@@ -68,9 +68,8 @@ class IasClient:
         """
 
         path = '/attestation/v3/report'
-        url = urljoin(self._ias_url, path)
-        LOGGER.debug("Posting attestation verification request to: %s",
-                     url)
+        url = '{}/{}'.format(self._ias_url, path)
+        LOGGER.debug("Posting attestation verification request to: %s", url)
         json = {"isvEnclaveQuote": quote}
 
         if manifest is not None:
@@ -81,7 +80,7 @@ class IasClient:
         LOGGER.debug("Posting attestation evidence payload: %s", json)
 
         response = requests.post(url, json=json, 
-                                 headers={"Ocp-Apim-SubscriptionKey": self._ias_key},
+                                 headers={"Ocp-Apim-Subscription-Key": self._ias_key},
                                  timeout=self._timeout)
         LOGGER.debug("received attestation result code: %d",
                      response.status_code)
